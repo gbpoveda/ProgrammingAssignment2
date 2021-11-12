@@ -1,25 +1,29 @@
-makeCacheMatrix <- function(x = matrix()) {
-  s <- NULL
-  set <- function(y) {
-    x <<- y
-    s <<- NULL
-  }
-  get <- function() x
-  setsolve <- function(solve) s <<- solve
-  getsolve <- function() s
-  list(set = set, get = get,
-       setsolve = setsolve,
-       getsolve = getsolve)
+
+
+
+makecachematrix <- function(x = matrix()){
+     inv <- NULL
+     def <- function(z){
+         x <<- z
+         inv <<- NULL
+     }
+     take <- function() x
+     defInv <- function(inverse) inv <<- inverse
+     takeInv <- function() inv
+     list(def = def, take = take, defInv = defInv, takeInv = takeInv)
+     
 }
 
-cacheSolve <- function(x, ...) {
-  s <- x$getsolve()
-  if(!is.null(s)) {
-    message("getting inversed matrix")
-    return(s)
+
+
+cachesolve <- function(x, ...){
+  inv <- x$takeInv()
+  if (!is.null(inv)){
+    print("cached data taken")
+    return(inv)
   }
-  data <- x$get()
-  s <- solve(data, ...)
-  x$setsolve(s)
-  s
+  m <- x$take()
+  inv <- solve(m, ...)
+  x$defInv(inv)
+  inv
 }
