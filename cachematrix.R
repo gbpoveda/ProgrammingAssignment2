@@ -1,25 +1,25 @@
-makeCacheMatrix <- function(mat = matrix()) {
-  inv <- NULL
-  set <- function(mtrx) {
-    mat <<- mtrx
-    inv <<- NULL
+makeCacheMatrix <- function(x = matrix()) {
+  s <- NULL
+  set <- function(y) {
+    x <<- y
+    s <<- NULL
   }
-  get <- function() mat
-  set.inverse <- function(setinv) inv <<- setinv
-  get.inverse <- function() inv
+  get <- function() x
+  setsolve <- function(solve) s <<- solve
+  getsolve <- function() s
   list(set = set, get = get,
-       set.inverse = set.inverse,
-       get.inverse = get.inverse)
+       setsolve = setsolve,
+       getsolve = getsolve)
 }
 
-
-cacheSolve <- function(cached.mat, ...) {
-  inv <- cached.mat$get.inverse()
-  if(!is.null(inv)) {
-    message("getting cached inverse")
-    return(inv)
-    raw.mat <- cached.mat$get()
-    inv <- solve(raw.mat, ...)
-    cached.mat$set.inverse(inv)
-    inv
+cacheSolve <- function(x, ...) {
+  s <- x$getsolve()
+  if(!is.null(s)) {
+    message("getting inversed matrix")
+    return(s)
+  }
+  data <- x$get()
+  s <- solve(data, ...)
+  x$setsolve(s)
+  s
 }
